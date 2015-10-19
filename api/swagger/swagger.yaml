@@ -1,0 +1,101 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: IBM Weather Exercise
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: weather
+    get:
+      description: Returns a weather object to the caller
+      # used as the method name of the controller
+      operationId: weather
+      parameters:
+        - name: zip
+          in: query
+          description: The zip code of the location for which you would like to query
+          required: false
+          type: string
+        - name: city
+          in: query
+          type: string
+          description: the name of a city for which you would like to query
+          
+        - name: units
+          in: query 
+          type: string
+          description: The type of units for the object (Imperial, Metric, Kelvin)
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/WeatherResponse"
+        # responses may fall through to errors
+        "400":
+          description: "Empty Query"
+          schema:
+            $ref: "#/definitions/EmptyQueryResponse"
+        "404":
+          description: "City or Zip not Found"
+          schema:
+            $ref: "#/definitions/NotFoundResponse"
+        "500":
+          description: "Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+# complex objects have schema definitions
+definitions:
+  WeatherResponse:
+    required:
+      ["coord", "weather"]
+    properties:
+      coord: 
+        required: ["lat", "lon"]
+        properties:
+          lat:
+            type: number
+          lon:
+            type: number
+      weather: 
+        required:
+          ["condition", "currentHigh", "currentLow"]
+        properties: 
+          condition:
+            type: string
+          currentHigh: 
+            type: number
+          currentLow:
+            type: number
+  EmptyQueryResponse: 
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  NotFoundResponse: 
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
