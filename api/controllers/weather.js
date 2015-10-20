@@ -40,26 +40,26 @@ function weather(req, res) {
   var url = "http://api.openweathermap.org/data/2.5/weather";
   // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   var options = {uri: url, qs:{appid:key}};
-      if(req.query['zip'] != undefined) {
-        options.qs.zip = req.query['zip'];
-      }
-      if(req.query['city'] != undefined) {
-        options.qs.city = req.query['city'];
-      }
-      if(options.qs.city === "" && options.qs.zip === "") {
-        res.statusCode = 400;
-        res.send({message: "Empty query not allowed"});
-        return;
-      }
-      if(options.qs.city === undefined && options.qs.zip === undefined) { 
-        res.statusCode = 400;
-        res.send({message: "Empty query not allowed"});
-        return;
-      }
-      if(req.query['units'] != undefined) {
-        options.qs.units=req.query['units'];
-      }
-    request.get(options, function(err, request, body) { 
+  if(req.query['zip'] != undefined) {
+    options.qs.zip = req.query['zip'];
+  }
+  if(req.query['city'] != undefined) {
+    options.qs.city = req.query['city'];
+  }
+  if(options.qs.city === "" && options.qs.zip === "") {
+    res.statusCode = 400;
+    res.send({message: "Empty query not allowed"});
+    return;
+  }
+  if(options.qs.city === undefined && options.qs.zip === undefined) { 
+    res.statusCode = 400;
+    res.send({message: "Empty query not allowed"});
+    return;
+  }
+  if(req.query['units'] != undefined) {
+    options.qs.units=req.query['units'];
+  }
+  request.get(options, function(err, request, body) { 
     body = JSON.parse(body);
     if(err) {
       res.statusCode = 500;
