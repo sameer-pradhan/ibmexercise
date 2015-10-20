@@ -51,6 +51,11 @@ function weather(req, res) {
         res.send({message: "Empty query not allowed"});
         return;
       }
+      if(options.qs.city === undefined && options.qs.zip === undefined) { 
+        res.statusCode = 400;
+        res.send({message: "Empty query not allowed"});
+        return;
+      }
       if(req.query['units'] != undefined) {
         options.qs.units=req.query['units'];
       }

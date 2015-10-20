@@ -17,7 +17,7 @@ consumes:
 produces:
   - application/json
 paths:
-  /:
+  /weather:
     # binds a127 app logic to a route
     x-swagger-router-controller: weather
     get:
